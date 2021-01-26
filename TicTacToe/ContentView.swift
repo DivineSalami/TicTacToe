@@ -24,7 +24,9 @@ struct Home : View {
                 
                 ForEach(0..<9, id: \.self) { index in
                     
-                    Color.white
+                    Color.red
+                        .frame(width: getWidth(), height: getWidth())
+                        .cornerRadius(30)
                     
                 }
                 
@@ -32,10 +34,19 @@ struct Home : View {
             .padding()
         }
     }
-}
+    
+    //Used to calculate width.
+    
+    func getWidth() -> CGFloat {
+        let width = UIScreen.main.bounds.width - (30 + 30)
+        
+        return width / 3
+    }
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }
+}
 }
