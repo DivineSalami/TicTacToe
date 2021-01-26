@@ -9,8 +9,28 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        Text("Hello, world!")
+        NavigationView {
+        Home()
+            .navigationTitle("Tic Tac Toe")
+            .preferredColorScheme(/*@START_MENU_TOKEN@*/.dark/*@END_MENU_TOKEN@*/)
+    }
+}
+}
+struct Home : View {
+    var body: some View {
+        VStack {
+            
+            LazyVGrid(columns: Array (repeating: GridItem(.flexible(), spacing: 15), count: 3), spacing: 15) {
+                
+                ForEach(0..<9, id: \.self) { index in
+                    
+                    Color.white
+                    
+                }
+                
+            }
             .padding()
+        }
     }
 }
 
