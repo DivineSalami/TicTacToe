@@ -12,7 +12,7 @@ struct ContentView: View {
         NavigationView {
             Home()
                 .navigationTitle("Tic Tac Toe")
-                .preferredColorScheme(.dark)
+                .preferredColorScheme(/*@START_MENU_TOKEN@*/.dark/*@END_MENU_TOKEN@*/)
         }
     }
 }
@@ -103,6 +103,7 @@ struct Home : View {
             msg = "Player X Won"
             gameOver.toggle()
         }
+        
         if checkMoves(player: "O") {
             msg = "Player X Won"
             gameOver.toggle()
@@ -121,10 +122,35 @@ struct Home : View {
                 
             }
         }
+        
+        //func checkMoves(player: String) -> Bool {
+        
+        for contestants in 0...2 {
+            
+            if moves[contestants] == player &&
+                moves[contestants+3] == player &&
+                moves[contestants+6] == player {
+                
+                return true
+                
+            }
+        }
+        if moves[0] == player && moves[4] == player && moves[8] == player {
+            
+            return true
+            
+        }
+        if moves[2] == player && moves[4] == player && moves[6] == player {
+            
+            return true
+            
+        }
+        
         return false
         
         
     }
+    
     
     
     struct ContentView_Previews: PreviewProvider {
@@ -133,3 +159,4 @@ struct Home : View {
         }
     }
 }
+
