@@ -10,11 +10,11 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         NavigationView {
-        Home()
-            .navigationTitle("Tic Tac Toe")
-            .preferredColorScheme(/*@START_MENU_TOKEN@*/.dark/*@END_MENU_TOKEN@*/)
+            Home()
+                .navigationTitle("Tic Tac Toe")
+                .preferredColorScheme(.dark)
+        }
     }
-}
 }
 struct Home : View {
     
@@ -24,6 +24,8 @@ struct Home : View {
     
     //Identifies current player
     @State var isPlaying = true
+    @State var gameOver = false
+    @State var msg = ""
     
     var body: some View {
         VStack {
@@ -45,13 +47,21 @@ struct Home : View {
                     
                     .frame(width: getWidth(), height: getWidth())
                     .cornerRadius(30)
+                    .rotation3DEffect(
+                        .init(degrees: moves [index] != "" ? 1802 : 0),
+                        axis: /*@START_MENU_TOKEN@*/(x: 0.0, y: 1.0, z: 0.0)/*@END_MENU_TOKEN@*/,
+                        anchor: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/,
+                        anchorZ: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/,
+                        perspective: 1.0
+                    )
+                    
                     .onTapGesture(perform : {
                         withAnimation(Animation.easeIn(duration: 0.5)) {
                             
                             if moves[index] == "" {
-                            
-                            moves[index] = isPlaying ? "X" : "O"
-                            isPlaying.toggle()
+                                
+                                moves[index] = isPlaying ? "X" : "O"
+                                isPlaying.toggle()
                             }
                         }
                     })
@@ -60,7 +70,23 @@ struct Home : View {
                 
             }
             .padding()
+            
+            
         }
+        .onChange(of: moves, perform: { value in
+            checkWinner()
+        })
+        .alert(isPresented: $gameOver, content: {
+            Alert(title: Text("Winner"), message: Text(msg), dismissButton: .destructive(Text( "Play Again"), action: {
+                
+                withAnimation(Animation.easeIn(duration: 0.5)) {
+                    moves.removeAll()
+                    moves = Array(repeating: "", count: 9)
+                    isPlaying = true
+                }
+                
+            }))
+        })
     }
     
     //Used to calculate width.
@@ -70,11 +96,40 @@ struct Home : View {
         
         return width / 3
     }
-
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+    
+    func checkWinner() {
+        
+        if checkMoves(player: "X") {
+            msg = "Player X Won"
+            gameOver.toggle()
+        }
+        if checkMoves(player: "O") {
+            msg = "Player X Won"
+            gameOver.toggle()
+        }
+        
     }
-}
+    
+    
+    func checkMoves(player: String) -> Bool {
+        for contestants in stride(from: 0, to: 9, by: 3){
+            if moves[contestants] == player &&
+                moves[contestants+1] == player &&
+                moves[contestants+2] == player {
+                
+                return true
+                
+            }
+        }
+        return false
+        
+        
+    }
+    
+    
+    struct ContentView_Previews: PreviewProvider {
+        static var previews: some View {
+            ContentView()
+        }
+    }
 }
